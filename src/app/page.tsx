@@ -26,7 +26,7 @@ export default function LandingPage() {
         <div className="flex flex-nowrap items-center gap-2 mx-auto">
           <span className="whitespace-nowrap">
             <span className="text-primary/80">Go to</span>{" "}
-            protectedText.vercel.app/
+            protected-notepad.vercel.app/
           </span>
 
           <Input
