@@ -267,9 +267,10 @@ export default function EditorPage({ slug }: EditorPageProps) {
     };
   };
 
-  // Lock
+  // Lock document
   const handleLock = async () => {
     setText("");
+    setPassword("");
     setDocumentPassword("");
 
     setLocked(true);
@@ -284,11 +285,6 @@ export default function EditorPage({ slug }: EditorPageProps) {
       </main>
     );
   }
-
-  /*
-    ~ Update icons to use phosphor-icons
-    ~ Lock site feature
-  */
 
   return (
     <>
@@ -470,9 +466,7 @@ export default function EditorPage({ slug }: EditorPageProps) {
           </div>
         </div>
 
-        <div className="mx-auto w-full">
-          <TextEditor value={text} onChange={setText} isEditable={!locked} />
-        </div>
+        <TextEditor value={text} onChange={setText} isEditable={!locked} />
       </main>
     </>
   );
