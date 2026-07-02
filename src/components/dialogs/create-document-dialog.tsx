@@ -29,6 +29,7 @@ export default function CreateDocumentDialog({
         className="sm:max-w-sm"
         onEscapeKeyDown={(e) => e.preventDefault()}
         onPointerDownOutside={(e) => e.preventDefault()}
+        showCloseButton={false}
       >
         <DialogHeader className="gap-3">
           <div className="flex flex-col gap-2">
