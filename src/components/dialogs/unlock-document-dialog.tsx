@@ -12,6 +12,7 @@ import {
 } from "../ui/dialog";
 import { Input } from "../ui/input";
 import { Spinner } from "../ui/spinner";
+import { Field, FieldError, FieldLabel } from "../ui/field";
 
 interface UnlockDocumentDialogProps {
   open: boolean;
@@ -44,20 +45,27 @@ export default function UnlockDocumentDialog({
           <DialogTitle className="text-lg">Password required</DialogTitle>
 
           <DialogDescription className="flex flex-col italic gap-1">
-            <span>This site (this URL) is already occupied</span>
+            <span>This site (this URL) is already occupied.</span>
 
             <span>
               If this is your site, enter the password, or you can try using{" "}
-              <Link href="/" className="underline">
-                different site
-              </Link>
+              <Link href="/" className="underline underline-offset-3 hover:text-primary duration-100">different site</Link>
+              .
+            </span>
+
+            <span className="mt-4">
+              Note: If you forgot your password then check{" "}
+              <Link href="/faq" className="underline underline-offset-3 hover:text-primary duration-100">FAQs</Link>
               .
             </span>
           </DialogDescription>
         </DialogHeader>
 
-        <div>
+        <Field>
+          <FieldLabel htmlFor="password">Password</FieldLabel>
+
           <Input
+            id="password"
             type="password"
             placeholder="Password used to encrypt this site..."
             value={password}
@@ -70,9 +78,9 @@ export default function UnlockDocumentDialog({
           />
 
           {error && (
-            <p className="text-sm font-medium text-destructive mt-2">{error}</p>
+            <FieldError className="text-sm font-medium text-destructive mt-2">{error}</FieldError>
           )}
-        </div>
+        </Field>
 
         <DialogFooter>
           <Button variant="outline" disabled={loading} onClick={onCancel}>

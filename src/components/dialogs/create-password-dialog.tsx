@@ -9,6 +9,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "../ui/dialog";
+import { Field, FieldLabel } from "../ui/field";
 import { Input } from "../ui/input";
 import { Spinner } from "../ui/spinner";
 
@@ -60,21 +61,41 @@ export default function CreatePasswordDialog({
         </DialogHeader>
 
         <div className="space-y-3 mt-2">
-          <Input
-            type="password"
-            placeholder="Password"
-            value={password}
-            disabled={loading}
-            onChange={(e) => onPasswordChange(e.target.value)}
-          />
+          <Field>
+            <FieldLabel htmlFor="password">Password</FieldLabel>
 
-          <Input
-            type="password"
-            placeholder="Confirm password"
-            value={confirmPassword}
-            disabled={loading}
-            onChange={(e) => onConfirmPasswordChange(e.target.value)}
-          />
+            <Input
+              id="password"
+              type="password"
+              placeholder="Password"
+              value={password}
+              disabled={loading}
+              onChange={(e) => onPasswordChange(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  onSave();
+                }
+              }}
+            />
+          </Field>
+
+          <Field>
+            <FieldLabel htmlFor="confirm-password">Confirm Password</FieldLabel>
+
+            <Input
+              id="confirm-password"
+              type="password"
+              placeholder="Confirm password"
+              value={confirmPassword}
+              disabled={loading}
+              onChange={(e) => onConfirmPasswordChange(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  onSave();
+                }
+              }}
+            />
+          </Field>
 
           {error && (
             <p className="text-sm font-medium text-destructive">{error}</p>
