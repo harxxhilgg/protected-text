@@ -26,6 +26,7 @@ export default function EditorPage({ slug }: EditorPageProps) {
   const router = useRouter();
 
   const [text, setText] = useState<string>("");
+  const [savedText, setSavedText] = useState<string>("");
   const [locked, setLocked] = useState<boolean>(true);
 
   const [document, setDocument] = useState<Document | null>(null);
@@ -61,6 +62,8 @@ export default function EditorPage({ slug }: EditorPageProps) {
   const [changedPasswordError, setChangedPasswordError] = useState<string>("");
   const [isPasswordChanging, setIsPasswordChanging] = useState<boolean>(false);
 
+  const hasUnsavedChanges = text !== savedText;
+
   useEffect(() => {
     async function checkDocument() {
       const doc = await findDocument(slug);
@@ -82,6 +85,22 @@ export default function EditorPage({ slug }: EditorPageProps) {
     checkDocument();
   }, [slug]);
 
+  // handleBefore ~ check for unsaved changes
+  useEffect(() => {
+    const handleBeforeUnload = (event: BeforeUnloadEvent) => {
+      if (!hasUnsavedChanges) return;
+
+      event.preventDefault();
+      event.returnValue = "";
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, [hasUnsavedChanges]);
+
   // Unlock existing site
   const handleUnlock = async () => {
     try {
@@ -95,6 +114,7 @@ export default function EditorPage({ slug }: EditorPageProps) {
       setDocumentPassword(password);
 
       setText(decrypted);
+      setSavedText(decrypted);
 
       setUnlockDialogOpen(false);
       setLocked(false);
@@ -131,6 +151,8 @@ export default function EditorPage({ slug }: EditorPageProps) {
 
       setDocument(savedDocument);
 
+      setSavedText(text);
+
       setCreatePasswordDialogOpen(false);
 
       setNewPassword("");
@@ -156,66 +178,92 @@ export default function EditorPage({ slug }: EditorPageProps) {
 
   // Update site / Save new data
   const handleUpdate = async () => {
-    try {
-      setIsSaving(true);
+    toast.promise(
+      async () => {
+        try {
+          setIsSaving(true);
 
-      // Network delay
-      await delay(1000);
+          await delay(1000);
 
-      const encryped = await encrypt(text, documentPassword);
+          const encryped = await encrypt(text, documentPassword);
 
-      const updated = await saveDocument(slug, encryped);
+          const updated = await saveDocument(slug, encryped);
 
-      setDocument(updated);
+          setDocument(updated);
 
-      toast.success("Document updated.");
-    } catch {
-      toast.error("Failed to save document.");
-    } finally {
-      setIsSaving(false);
-    }
+          setSavedText(text);
+        } catch (error) {
+          console.error(error);
+        } finally {
+          setIsSaving(false);
+        }
+      },
+      {
+        loading: "Saving...",
+        success: "Saved.",
+        error: "Failed to save.",
+        closeButton: true,
+      },
+    );
   };
 
   // Delete site
   const handleDelete = async () => {
-    try {
-      setIsDeleting(true);
+    toast.promise(
+      async () => {
+        try {
+          setIsDeleting(true);
 
-      // Network delay
-      await delay(1000);
+          // Network delay
+          await delay(1000);
 
-      await deleteDocument(slug);
+          await deleteDocument(slug);
 
-      router.replace("/");
-
-      toast.success("This site has been deleted permanently.");
-    } catch {
-      toast.error("Failed to delete this site.");
-    } finally {
-      setIsDeleting(false);
-    }
+          router.replace("/");
+        } catch (error) {
+          console.error(error);
+        } finally {
+          setIsDeleting(false);
+        };
+      },
+      {
+        loading: "Deleting site...",
+        success: "This site has been deleted permanently.",
+        error: "Failed to delete site.",
+        closeButton: true,
+      },
+    );
   };
 
   // Reload site data
   const handleReload = async () => {
-    try {
-      setIsReloading(true);
+    toast.promise(
+      async () => {
+        try {
+          setIsReloading(true);
 
-      // Keep this network delay
-      await delay(1000);
+          // Keep this network delay
+          await delay(1000);
 
-      const decrypted = await decrypt(document!.content, password);
+          const decrypted = await decrypt(document!.content, password);
 
-      setDocumentPassword(password);
+          setDocumentPassword(password);
 
-      setText(decrypted);
-
-      toast.success("Site updated.");
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setIsReloading(false);
-    }
+          setText(decrypted);
+          setSavedText(decrypted);
+        } catch (error) {
+          console.error(error);
+        } finally {
+          setIsReloading(false);
+        };
+      },
+      {
+        loading: "Reloading...",
+        success: "Site updated.",
+        error: "Error updating site.",
+        closeButton: true,
+      }
+    );
   };
 
   // Cancel changing password
@@ -277,7 +325,6 @@ export default function EditorPage({ slug }: EditorPageProps) {
     setUnlockDialogOpen(true);
   };
 
-  // Later replace it with skeleton
   if (isCheckingDocument) {
     return (
       <main className="flex min-h-screen items-center justify-center">
@@ -368,7 +415,7 @@ export default function EditorPage({ slug }: EditorPageProps) {
 
       <main
         className={`
-          flex flex-col gap-3 transition-opacity duration-200
+          flex flex-col gap-3 transition-opacity duration-200 h-[90vh]
           ${isReloading ? "pointer-events-none opacity-50" : "opacity-100"}
         `}
       >
@@ -455,14 +502,16 @@ export default function EditorPage({ slug }: EditorPageProps) {
             )}
 
             {/* Delete */}
-            <Button
-              variant="destructive"
-              onClick={() => setDeleteDocumentDialogOpen(true)}
-              className="w-22 rounded-xl"
-            >
-              <TrashIcon weight="duotone" />
-              Delete
-            </Button>
+            {documentPassword && (
+              <Button
+                variant="destructive"
+                onClick={() => setDeleteDocumentDialogOpen(true)}
+                className="w-22 rounded-xl"
+              >
+                <TrashIcon weight="duotone" />
+                Delete
+              </Button>
+            )}
           </div>
         </div>
 
