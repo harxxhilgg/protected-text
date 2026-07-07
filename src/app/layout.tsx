@@ -4,6 +4,7 @@ import { geist } from "@/lib/fonts";
 import { ThemeProvider } from "next-themes";
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import DotFieldBg from "@/components/dot-field-bg";
 
 export const metadata: Metadata = {
   title: "Protected Text",
@@ -20,7 +21,12 @@ export default function RootLayout({
       <body className={`${geist.className} antialiased`}>
         <ThemeProvider attribute="class" enableSystem>
           <TooltipProvider>
-            <main className="w-full max-w-4xl mx-auto py-10">
+            {/* Background */}
+            <div className="fixed inset-0 -z-20">
+              <DotFieldBg sparkle={false} dotSpacing={35} />
+            </div>
+
+            <main className="w-full">
               {children}
             </main>
 
