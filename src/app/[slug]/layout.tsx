@@ -5,5 +5,9 @@ export default function SlugLayout({
 }: {
   children: React.ReactNode,
 }) {
-  return children;
+  return (
+    <main className="w-full max-w-4xl mx-auto py-10">
+      {children}
+    </main>
+  );
 };
