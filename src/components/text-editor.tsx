@@ -37,7 +37,7 @@ export default function TextEditor({
       onChange={onChange}
       editable={isEditable}
       theme={oneDark}
-      height="95vh"
+      height="90vh"
       placeholder="Your text goes here..."
       aria-placeholder="Your text goes here..."
       extensions={[
