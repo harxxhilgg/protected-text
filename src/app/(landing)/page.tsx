@@ -40,60 +40,74 @@ export default function LandingPage() {
   };
 
   return (
-    <div className="flex w-full flex-1 items-center justify-center px-8">
-      <div className="w-full max-w-4xl flex flex-col items-center gap-10">
-        <div className="space-y-6 text-center">
-          <h2 className="text-3xl font-bold">
+    <div className="flex w-full flex-1 items-center justify-center px-0 sm:px-8">
+      <div className="w-full sm:max-w-4xl flex flex-col sm:items-center gap-6 sm:gap-10">
+        <div className="space-y-3 sm:space-y-6 text-center">
+          <h2 className="text-xl sm:text-3xl font-bold">
             Encrypt your notes in the browser.
           </h2>
 
-          <p className="mx-auto max-w-2xl text-muted-foreground">
+          <p className="text-sm mx-auto max-w-2xl text-muted-foreground px-6">
             True client-side encryption for your notes. No logs, no tracking
             cookies, and absolutely no backdoor access. Pure digital peace of
             mind.
           </p>
         </div>
 
-        <div className="flex flex-wrap items-center justify-center gap-2">
-          <span className={`${ptSans.className} text-primary sm:text-xl tracking-wide`}>
+        <div className="flex flex-wrap items-center sm:justify-center gap-2 px-8">
+          <span className={`${ptSans.className} text-primary pl-1 sm:pl-0 sm:text-xl tracking-wide`}>
             protected-notepad.vercel.app/
           </span>
 
-          <Input
-            id="site-slug-input"
-            className={`${ptSans.className} h-10 w-80 text-xl md:text-[18px] tracking-wide`}
-            placeholder="Your site name..."
-            value={slug}
-            onChange={(e) => {
-              const value = e.target.value
-                .toLowerCase()
-                .replace(/\s+/g, "-")
-                .replace(/[^a-z0-9-]/g, "");
+          <div className="flex items-center gap-2">
+            <Input
+              id="site-slug-input"
+              className={`${ptSans.className} sm:h-10 w-70 sm:w-80 sm:text-xl md:text-[18px] tracking-wide`}
+              placeholder="Your site name..."
+              value={slug}
+              onChange={(e) => {
+                const value = e.target.value
+                  .toLowerCase()
+                  .replace(/\s+/g, "-")
+                  .replace(/[^a-z0-9-]/g, "");
 
-              setSlug(value);
-            }}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") {
-                handleOpen();
-              }
-            }}
-          />
+                setSlug(value);
+              }}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  handleOpen();
+                }
+              }}
+            />
 
-          <Button
-            size="icon-lg"
-            className="rounded-full"
-            onClick={handleOpen}
-          >
-            {isLoading ? (
-              <Spinner />
-            ) : (
-              <CaretRightIcon weight="regular" className="size-5" />
-            )}
-          </Button>
+            <Button
+              size="icon"
+              className="rounded-full flex sm:hidden"
+              onClick={handleOpen}
+            >
+              {isLoading ? (
+                <Spinner />
+              ) : (
+                <CaretRightIcon weight="regular" className="size-4" />
+              )}
+            </Button>
+
+            <Button
+              size="icon-lg"
+              className="rounded-full hidden sm:flex"
+              onClick={handleOpen}
+            >
+              {isLoading ? (
+                <Spinner />
+              ) : (
+                <CaretRightIcon weight="regular" className="size-5" />
+              )}
+            </Button>
+          </div>
         </div>
 
         {error && (
-          <p className="text-center text-destructive">{error}</p>
+          <p className="text-destructive -mt-4 px-8 font-medium">{error}</p>
         )}
       </div>
     </div>

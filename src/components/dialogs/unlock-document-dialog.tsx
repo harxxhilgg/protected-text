@@ -36,7 +36,7 @@ export default function UnlockDocumentDialog({
   return (
     <Dialog open={open}>
       <DialogContent
-        className="sm:max-w-md"
+        className="max-w-xs sm:max-w-md"
         onEscapeKeyDown={(e) => e.preventDefault()}
         onPointerDownOutside={(e) => e.preventDefault()}
         showCloseButton={false}
@@ -91,7 +91,7 @@ export default function UnlockDocumentDialog({
             variant="default"
             disabled={loading}
             onClick={onUnlock}
-            className="w-20"
+            className="sm:w-20"
           >
             {loading ? <Spinner /> : "Unlock"}
           </Button>

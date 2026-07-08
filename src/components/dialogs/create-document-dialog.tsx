@@ -26,7 +26,7 @@ export default function CreateDocumentDialog({
   return (
     <Dialog open={open}>
       <DialogContent
-        className="sm:max-w-sm"
+        className="max-w-xs sm:max-w-sm"
         onEscapeKeyDown={(e) => e.preventDefault()}
         onPointerDownOutside={(e) => e.preventDefault()}
         showCloseButton={false}

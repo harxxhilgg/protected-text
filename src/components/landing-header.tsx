@@ -6,56 +6,48 @@ import { ptSans } from "@/lib/fonts";
 
 export default function LandingHeader() {
   return (
-    <main className="flex items-center">
+    <main className={`${ptSans.className} flex flex-col sm:flex-row gap-2 items-center`}>
       <div className="flex-1">
-        <h1 className={`${ptSans.className} text-2xl font-semibold`}>
+        <h1 className="text-2xl font-semibold">
           Protected Notepad
         </h1>
       </div>
 
-      <div className="flex flex-1 justify-center gap-6 transition-all text-muted-foreground">
+      <div className="flex flex-1 justify-center gap-2 sm:gap-6 transition-all text-muted-foreground">
         <Button
           variant="ghost"
-          className="rounded-lg text-[16px]"
+          className="rounded-lg text-[14px] sm:text-[16px]"
           asChild
         >
-          <Link href="/">
-            Home
-          </Link>
+          <Link href="/">Home</Link>
         </Button>
 
         <Button
           variant="ghost"
-          className="rounded-lg text-[16px]"
+          className="rounded-lg text-[14px] sm:text-[16px]"
           asChild
         >
-          <Link href="/how-it-works">
-            How it works
-          </Link>
+          <Link href="/how-it-works">How it works</Link>
         </Button>
 
         <Button
           variant="ghost"
-          className="rounded-lg text-[16px]"
+          className="rounded-lg text-[14px] sm:text-[16px]"
           asChild
         >
-          <Link href="/insights">
-            Insights
-          </Link>
+          <Link href="/insights">Insights</Link>
         </Button>
 
         <Button
           variant="ghost"
-          className="rounded-lg text-[16px]"
+          className="rounded-lg text-[14px] sm:text-[16px]"
           asChild
         >
-          <Link href="/faq">
-            FAQ
-          </Link>
+          <Link href="/faq">FAQ</Link>
         </Button>
       </div>
 
-      <div className="flex flex-1 justify-end">
+      <div className="hidden sm:flex flex-1 justify-end">
         <Button
           variant="outline"
           size="lg"

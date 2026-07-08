@@ -20,11 +20,11 @@ export default function RootLayout({
           <LandingHeader />
         </header>
 
-        <main className="flex-1 flex">
+        <main className={`flex-1 flex`}>
           {children}
         </main>
 
-        <footer className="px-8 pb-6 pt-4">
+        <footer className="px-0 sm:px-8 pb-4 sm:pb-6 pt-2 sm:pt-4 border-t sm:border-0 bg-card sm:bg-transparent">
           <LandingFooter />
         </footer>
       </div>

@@ -415,103 +415,117 @@ export default function EditorPage({ slug }: EditorPageProps) {
 
       <main
         className={`
-          flex flex-col gap-3 transition-opacity duration-200 h-[90vh]
+          flex flex-col gap-3 transition-opacity duration-200 sm:h-[90vh]
           ${isReloading ? "pointer-events-none opacity-50" : "opacity-100"}
         `}
       >
-        <div className="mx-1 flex items-center justify-between">
-          <h2 className="text-lg font-semibold">{slug}</h2>
+        <div className="mx-1 flex items-center justify-between px-4">
+          <h2 className="text-[16px] font-semibold">{slug}</h2>
 
           {/* Top-Right Buttons */}
-          <div className="flex gap-2">
-            {/* Reload */}
-            <Tooltip delayDuration={250}>
-              <TooltipTrigger asChild>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  disabled={isReloading}
-                  onClick={handleReload}
-                  className="rounded-lg"
-                >
-                  {isReloading ? (
-                    <Spinner className="size-5" />
-                  ) : (
-                    <ArrowsClockwiseIcon className="size-5" />
-                  )}
-                </Button>
-              </TooltipTrigger>
+          <div className="flex flex-col sm:flex-row gap-2">
+            <div className="flex gap-2 justify-end">
+              {/* Reload */}
+              {documentPassword && (
+                <Tooltip delayDuration={250}>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      disabled={isReloading}
+                      onClick={handleReload}
+                      className="rounded-lg"
+                    >
+                      {isReloading ? (
+                        <Spinner className="size-5" />
+                      ) : (
+                        <ArrowsClockwiseIcon className="size-5" />
+                      )}
+                    </Button>
+                  </TooltipTrigger>
 
-              <TooltipContent side="bottom">Reload</TooltipContent>
-            </Tooltip>
+                  <TooltipContent side="bottom">Reload</TooltipContent>
+                </Tooltip>
+              )}
 
-            {/* Lock */}
-            <Tooltip delayDuration={250}>
-              <TooltipTrigger asChild>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={handleLock}
-                  className="rounded-lg"
-                >
-                  <LockIcon className="size-5" />
-                </Button>
-              </TooltipTrigger>
+              {/* Lock */}
+              {documentPassword && (
+                <Tooltip delayDuration={250}>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={handleLock}
+                      className="rounded-lg"
+                    >
+                      <LockIcon className="size-5" />
+                    </Button>
+                  </TooltipTrigger>
 
-              <TooltipContent side="bottom">Lock</TooltipContent>
-            </Tooltip>
+                  <TooltipContent side="bottom">Lock</TooltipContent>
+                </Tooltip>
+              )}
 
-            {/* Reset */}
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button variant="ghost" size="icon" onClick={() => setText("")}>
-                  <BackspaceIcon className="size-5" />
-                </Button>
-              </TooltipTrigger>
+              {/* Reset */}
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button variant="ghost" size="icon" onClick={() => setText("")}>
+                    <BackspaceIcon className="size-5" />
+                  </Button>
+                </TooltipTrigger>
 
-              <TooltipContent side="bottom">Reset site</TooltipContent>
-            </Tooltip>
+                <TooltipContent side="bottom">Reset site</TooltipContent>
+              </Tooltip>
 
-            {/* Save */}
-            <Button
-              variant="default"
-              className="w-20 rounded-xl"
-              disabled={isSaving}
-              onClick={async () => {
-                if (documentPassword) {
-                  handleUpdate();
-                } else {
-                  setCreatePasswordDialogOpen(true);
-                }
-              }}
-            >
-              {isSaving ? <Spinner /> : "Save"}
-            </Button>
-
-            {/* Change Password ~ only shown to already existing site users */}
-            {documentPassword && (
+              {/* Save */}
               <Button
-                variant="secondary"
-                className="w-40 rounded-xl"
+                variant="default"
+                className="w-20 rounded-xl"
+                disabled={isSaving}
                 onClick={async () => {
-                  setChangePasswordDialogOpen(true);
+                  if (documentPassword) {
+                    handleUpdate();
+                  } else {
+                    setCreatePasswordDialogOpen(true);
+                  }
                 }}
               >
-                Change Password
+                {isSaving ? (
+                  <Spinner />
+                ) : (
+                  <>
+                    <p>Save</p>
+                  </>
+                )}
               </Button>
-            )}
+            </div>
 
-            {/* Delete */}
-            {documentPassword && (
-              <Button
-                variant="destructive"
-                onClick={() => setDeleteDocumentDialogOpen(true)}
-                className="w-22 rounded-xl"
-              >
-                <TrashIcon weight="duotone" />
-                Delete
-              </Button>
-            )}
+            <div className="flex gap-1">
+              {/* Change Password*/}
+              {documentPassword && (
+                <Button
+                  variant="secondary"
+                  className="w-40 rounded-xl"
+                  onClick={async () => {
+                    setChangePasswordDialogOpen(true);
+                  }}
+                >
+                  Change Password
+                </Button>
+              )}
+
+              {/* Delete */}
+              {documentPassword && (
+                <Button
+                  variant="destructive"
+                  onClick={() => setDeleteDocumentDialogOpen(true)}
+                  className="sm:w-22 rounded-xl"
+                >
+                  <TrashIcon weight="duotone" className="block sm:hidden" />
+                  <p className="hidden sm:block">Delete</p>
+                </Button>
+              )}
+            </div>
           </div>
         </div>
 

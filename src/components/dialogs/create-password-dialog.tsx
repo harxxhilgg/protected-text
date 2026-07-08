@@ -39,7 +39,7 @@ export default function CreatePasswordDialog({
   return (
     <Dialog open={open}>
       <DialogContent
-        className="sm:max-w-sm"
+        className="max-w-xs sm:max-w-sm"
         onEscapeKeyDown={(e) => e.preventDefault()}
         onPointerDownOutside={(e) => e.preventDefault()}
         showCloseButton={false}
@@ -111,7 +111,7 @@ export default function CreatePasswordDialog({
             variant="default"
             disabled={loading}
             onClick={onSave}
-            className="w-18"
+            className="sm:w-18"
           >
             {loading ? <Spinner /> : "Save"}
           </Button>

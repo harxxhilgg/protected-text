@@ -2,6 +2,7 @@ import CodeMirror from "@uiw/react-codemirror";
 import { oneDark } from "@codemirror/theme-one-dark";
 import { markdown } from "@codemirror/lang-markdown";
 import { EditorView } from "@codemirror/view";
+import { useMediaQuery } from "usehooks-ts";
 
 interface TextEditorProps {
   value: string;
@@ -14,6 +15,8 @@ export default function TextEditor({
   onChange,
   isEditable,
 }: TextEditorProps) {
+  const isDesktop = useMediaQuery("(min-width: 640px)");
+
   const editorTheme = EditorView.theme({
     "&": {
       borderRadius: "2px",
@@ -37,7 +40,8 @@ export default function TextEditor({
       onChange={onChange}
       editable={isEditable}
       theme={oneDark}
-      height="90vh"
+      height={isDesktop ? "90vh" : "80vh"}
+      className="w-90 sm:w-full mx-auto"
       placeholder="Your text goes here..."
       aria-placeholder="Your text goes here..."
       extensions={[

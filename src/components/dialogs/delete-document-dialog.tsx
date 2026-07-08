@@ -28,7 +28,7 @@ export default function DeleteDocumentDialog({
   return (
     <Dialog open={open}>
       <DialogContent
-        className="sm:max-w-sm"
+        className="max-w-xs sm:max-w-sm"
         onEscapeKeyDown={(e) => e.preventDefault()}
         onPointerDownOutside={(e) => e.preventDefault()}
         showCloseButton={false}
@@ -56,7 +56,7 @@ export default function DeleteDocumentDialog({
             variant="destructive"
             disabled={loading}
             onClick={onDelete}
-            className="w-26"
+            className="sm:w-26"
           >
             {loading ? <Spinner /> : "Delete site!"}
           </Button>

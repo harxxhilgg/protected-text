@@ -3,13 +3,14 @@
 import { CopyrightIcon } from "@phosphor-icons/react";
 import { Button } from "./ui/button";
 import Link from "next/link";
+import { ptSans } from "@/lib/fonts";
 
 export default function LandingFooter() {
   return (
-    <main className="flex items-center justify-between text-muted-foreground">
-      <div className="flex items-center gap-1 text-sm font-medium">
-        <CopyrightIcon size="16" />
-        <p>2026 Protected Notepad. All rights reserved.</p>
+    <main className={`${ptSans.className} flex flex-col-reverse sm:flex-row gap-4 items-center justify-between text-muted-foreground`}>
+      <div className="flex items-center gap-1 text-xs sm:text-sm font-medium">
+        <CopyrightIcon />
+        <p className="tracking-wide">2026 Protected Notepad. All rights reserved.</p>
       </div>
 
       <div className="flex items-center font-medium">
