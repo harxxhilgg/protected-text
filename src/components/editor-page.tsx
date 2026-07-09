@@ -17,6 +17,8 @@ import DeleteDocumentDialog from "./dialogs/delete-document-dialog";
 import { useRouter } from "next/navigation";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 import ChangePasswordDialog from "./dialogs/change-password-dialog";
+import { useHotkeys } from "react-hotkeys-hook";
+import { ptSans } from "@/lib/fonts";
 
 interface EditorPageProps {
   slug: string;
@@ -325,6 +327,46 @@ export default function EditorPage({ slug }: EditorPageProps) {
     setUnlockDialogOpen(true);
   };
 
+  const save = () => {
+    if (locked || isSaving || isReloading || !hasUnsavedChanges) return;
+
+    // Don't allow saving while dialogs are open
+    if (createPasswordDialogOpen || unlockDialogOpen || changePasswordDialogOpen || deleteDocumentDialogOpen) {
+      return;
+    }
+
+    if (documentPassword) {
+      handleUpdate();
+    } else {
+      setCreatePasswordDialogOpen(true);
+    }
+  };
+
+  // cmd+s orsssssss ctrl+s to save
+  useHotkeys(
+    "meta+s, ctrl+s",
+    (event) => {
+      event.preventDefault();
+      save();
+    },
+    {
+      preventDefault: true,
+      enableOnFormTags: true,
+      enableOnContentEditable: true,
+    },
+    [
+      locked,
+      isSaving,
+      isReloading,
+      createPasswordDialogOpen,
+      unlockDialogOpen,
+      changePasswordDialogOpen,
+      deleteDocumentDialogOpen,
+      documentPassword,
+      text,
+    ]
+  );
+
   if (isCheckingDocument) {
     return (
       <main className="flex min-h-screen items-center justify-center">
@@ -419,8 +461,8 @@ export default function EditorPage({ slug }: EditorPageProps) {
           ${isReloading ? "pointer-events-none opacity-50" : "opacity-100"}
         `}
       >
-        <div className="mx-1 flex items-center justify-between px-4">
-          <h2 className="text-[16px] font-semibold">{slug}</h2>
+        <div className="mx-1 flex items-center justify-between px-4 sm:px-0">
+          <h2 className={`${ptSans.className} text-[18px] sm:text-[20px] font-semibold`}>{slug}</h2>
 
           {/* Top-Right Buttons */}
           <div className="flex flex-col sm:flex-row gap-2">
@@ -482,13 +524,14 @@ export default function EditorPage({ slug }: EditorPageProps) {
                 variant="default"
                 className="w-20 rounded-xl"
                 disabled={isSaving}
-                onClick={async () => {
-                  if (documentPassword) {
-                    handleUpdate();
-                  } else {
-                    setCreatePasswordDialogOpen(true);
-                  }
-                }}
+                // onClick={async () => {
+                //   if (documentPassword) {
+                //     handleUpdate();
+                //   } else {
+                //     setCreatePasswordDialogOpen(true);
+                //   }
+                // }}
+                onClick={save}
               >
                 {isSaving ? (
                   <Spinner />
