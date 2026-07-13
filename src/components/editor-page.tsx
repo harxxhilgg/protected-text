@@ -342,7 +342,7 @@ export default function EditorPage({ slug }: EditorPageProps) {
     }
   };
 
-  // cmd+s orsssssss ctrl+s to save
+  // cmd+s or ctrl+s to save
   useHotkeys(
     "meta+s, ctrl+s",
     (event) => {
@@ -367,10 +367,87 @@ export default function EditorPage({ slug }: EditorPageProps) {
     ]
   );
 
+  const lock = () => {
+    if (locked || isSaving || isReloading || hasUnsavedChanges) return;
+
+    if (createPasswordDialogOpen || unlockDialogOpen || changePasswordDialogOpen || deleteDocumentDialogOpen) {
+      return;
+    }
+
+    if (documentPassword) {
+      handleLock();
+    } else {
+      setCreatePasswordDialogOpen(true);
+    }
+  };
+
+  // cmd+l or ctrl+l to lock
+  useHotkeys(
+    "meta+l, ctrl+l",
+    (event) => {
+      event.preventDefault();
+      lock();
+    },
+    {
+      preventDefault: true,
+      enableOnFormTags: true,
+      enableOnContentEditable: true,
+    },
+    [
+      locked,
+      isSaving,
+      isReloading,
+      createPasswordDialogOpen,
+      unlockDialogOpen,
+      changePasswordDialogOpen,
+      deleteDocumentDialogOpen,
+      documentPassword,
+      text,
+    ]
+  );
+
+  const hotReload = () => {
+    if (locked || isSaving || isReloading || hasUnsavedChanges) return;
+
+    if (createPasswordDialogOpen || unlockDialogOpen || changePasswordDialogOpen || deleteDocumentDialogOpen) {
+      return;
+    }
+
+    if (documentPassword) {
+      handleReload();
+    } else {
+      setCreatePasswordDialogOpen(true);
+    }
+  };
+
+  useHotkeys(
+    "meta+shift+r ,ctrl+shift+r",
+    (event) => {
+      event.preventDefault();
+      hotReload();
+    },
+    {
+      preventDefault: true,
+      enableOnFormTags: true,
+      enableOnContentEditable: true,
+    },
+    [
+      locked,
+      isSaving,
+      isReloading,
+      createPasswordDialogOpen,
+      unlockDialogOpen,
+      changePasswordDialogOpen,
+      deleteDocumentDialogOpen,
+      documentPassword,
+      text,
+    ]
+  );
+
   if (isCheckingDocument) {
     return (
       <main className="flex min-h-screen items-center justify-center">
-        <Spinner className="size-6" />
+        <Spinner className="size-5" />
       </main>
     );
   }
@@ -451,7 +528,7 @@ export default function EditorPage({ slug }: EditorPageProps) {
 
       {isReloading && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/40 backdrop-blur-xs">
-          <Spinner className="size-8" />
+          <Spinner className="size-5" />
         </div>
       )}
 
@@ -524,13 +601,6 @@ export default function EditorPage({ slug }: EditorPageProps) {
                 variant="default"
                 className="w-20 rounded-xl"
                 disabled={isSaving}
-                // onClick={async () => {
-                //   if (documentPassword) {
-                //     handleUpdate();
-                //   } else {
-                //     setCreatePasswordDialogOpen(true);
-                //   }
-                // }}
                 onClick={save}
               >
                 {isSaving ? (

@@ -53,7 +53,7 @@ export default function TextEditor({
         lineNumbers: false, // Toggle line numbers
         foldGutter: false,
         highlightActiveLine: false, // Highlight active line
-        searchKeymap: false, // cmd + f or alt + f
+        searchKeymap: true, // cmd + f or alt + f
         highlightActiveLineGutter: false,
         history: true,
         drawSelection: false, // Text selection
