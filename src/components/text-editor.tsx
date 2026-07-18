@@ -30,7 +30,7 @@ export default function TextEditor({
       fontSize: "15px",
       lineHeight: "1.6",
       padding: "8px",
-      fontFace: "Segoe UI, monospace",
+      fontFamily: "SF Mono, Segoe UI, monospace",
     },
   });
 
@@ -53,7 +53,7 @@ export default function TextEditor({
         lineNumbers: false, // Toggle line numbers
         foldGutter: false,
         highlightActiveLine: false, // Highlight active line
-        searchKeymap: true, // cmd + f or alt + f
+        searchKeymap: true, // cmd + f or ctrl + f
         highlightActiveLineGutter: false,
         history: true,
         drawSelection: false, // Text selection
@@ -62,7 +62,7 @@ export default function TextEditor({
         indentOnInput: false,
         bracketMatching: false,
         closeBrackets: true,
-        autocompletion: false,
+        autocompletion: true,
         rectangularSelection: true,
         crosshairCursor: false,
         highlightSelectionMatches: true,

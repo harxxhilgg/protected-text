@@ -381,9 +381,9 @@ export default function EditorPage({ slug }: EditorPageProps) {
     }
   };
 
-  // cmd+l or ctrl+l to lock
+  // cmd+shift+l or ctrl+shift+l to lock
   useHotkeys(
-    "meta+l, ctrl+l",
+    "meta+shift+l, ctrl+shift+l",
     (event) => {
       event.preventDefault();
       lock();
@@ -420,6 +420,7 @@ export default function EditorPage({ slug }: EditorPageProps) {
     }
   };
 
+  // cmd+shift+r or ctrl+shift+r to reload 
   useHotkeys(
     "meta+shift+r ,ctrl+shift+r",
     (event) => {
@@ -593,7 +594,7 @@ export default function EditorPage({ slug }: EditorPageProps) {
                   </Button>
                 </TooltipTrigger>
 
-                <TooltipContent side="bottom">Reset site</TooltipContent>
+                <TooltipContent side="bottom">Reset</TooltipContent>
               </Tooltip>
 
               {/* Save */}
