@@ -10,7 +10,7 @@ export default function LandingFooter() {
     <main className={`${ptSans.className} flex flex-col-reverse sm:flex-row gap-4 items-center justify-between text-muted-foreground`}>
       <div className="flex items-center gap-1 text-xs sm:text-sm font-medium">
         <CopyrightIcon />
-        <p className="tracking-wide">2026 Protected Notepad. All rights reserved.</p>
+        <p className="tracking-wide">2026 Protected Notepad. MIT Licensed.</p>
       </div>
 
       <div className="flex items-center font-medium">
@@ -20,7 +20,16 @@ export default function LandingFooter() {
           className="hover:bg-primary/0"
           asChild
         >
-          <Link href="">Privacy & Security</Link>
+          <Link href="/security">Security</Link>
+        </Button>
+
+        <Button
+          variant="ghost"
+          size="sm"
+          className="hover:bg-primary/0"
+          onClick={() => window.open("https://github.com/harxxhilgg", "_blank")}
+        >
+          GitHub
         </Button>
 
         <Button
@@ -29,16 +38,7 @@ export default function LandingFooter() {
           className="hover:bg-primary/0"
           asChild
         >
-          <Link href="">GitHub</Link>
-        </Button>
-
-        <Button
-          variant="ghost"
-          size="sm"
-          className="hover:bg-primary/0"
-          asChild
-        >
-          <Link href="">Status</Link>
+          <Link href="/status">Status</Link>
         </Button>
       </div>
     </main>

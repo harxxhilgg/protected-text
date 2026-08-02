@@ -54,8 +54,8 @@ export default function LandingPage() {
           </p>
         </div>
 
-        <div className="flex flex-wrap items-center sm:justify-center gap-2 px-8">
-          <span className={`${ptSans.className} text-primary pl-1 sm:pl-0 sm:text-xl tracking-wide`}>
+        <div className="flex flex-wrap items-center justify-center gap-2 px-8">
+          <span className={`${ptSans.className} text-primary sm:text-xl tracking-wide`}>
             protected-notepad.vercel.app/
           </span>
 
@@ -80,6 +80,7 @@ export default function LandingPage() {
               }}
             />
 
+            {/* Right arrow btn - for mobile */}
             <Button
               size="icon"
               className="rounded-full flex sm:hidden"
@@ -92,6 +93,7 @@ export default function LandingPage() {
               )}
             </Button>
 
+            {/* Right arrow btn - for desktop/laptop */}
             <Button
               size="icon-lg"
               className="rounded-full hidden sm:flex"

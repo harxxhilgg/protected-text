@@ -13,10 +13,10 @@ export default function LandingHeader() {
         </h1>
       </div>
 
-      <div className="flex flex-1 justify-center gap-2 sm:gap-6 transition-all text-muted-foreground">
+      <div className="flex flex-1 justify-center gap-2 sm:gap-6 transition-all text-primary/90">
         <Button
           variant="ghost"
-          className="rounded-lg text-[14px] sm:text-[16px]"
+          className="rounded-lg text-sm sm:text-[16px] font-medium"
           asChild
         >
           <Link href="/">Home</Link>
@@ -24,7 +24,7 @@ export default function LandingHeader() {
 
         <Button
           variant="ghost"
-          className="rounded-lg text-[14px] sm:text-[16px]"
+          className="rounded-lg text-sm sm:text-[16px] font-medium"
           asChild
         >
           <Link href="/how-it-works">How it works</Link>
@@ -32,15 +32,15 @@ export default function LandingHeader() {
 
         <Button
           variant="ghost"
-          className="rounded-lg text-[14px] sm:text-[16px]"
+          className="rounded-lg text-sm sm:text-[16px] font-medium"
           asChild
         >
-          <Link href="/insights">Insights</Link>
+          <Link href="/security">Security</Link>
         </Button>
 
         <Button
           variant="ghost"
-          className="rounded-lg text-[14px] sm:text-[16px]"
+          className="rounded-lg text-sm sm:text-[16px] font-medium"
           asChild
         >
           <Link href="/faq">FAQ</Link>
