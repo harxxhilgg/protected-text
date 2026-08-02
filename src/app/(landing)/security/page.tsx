@@ -37,7 +37,7 @@ export default function SecurityPage() {
         </ol>
       </div>
 
-      <div className="my-10 sm:my-20" />
+      <div className="my-10" />
     </div>
   );
 }
