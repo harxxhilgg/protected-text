@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { geist } from "@/lib/fonts";
 import { ThemeProvider } from "next-themes";
-import { Toaster } from "@/components/ui/sonner";
+import { Toaster } from "@/components/ui/toast";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import DotFieldBg from "@/components/dot-field-bg";
 
@@ -30,12 +30,7 @@ export default function RootLayout({
               {children}
             </main>
 
-            <Toaster
-              position="top-right"
-              toastOptions={{
-                closeButton: true,
-              }}
-            />
+            <Toaster position="top-right" />
           </TooltipProvider>
         </ThemeProvider>
       </body>

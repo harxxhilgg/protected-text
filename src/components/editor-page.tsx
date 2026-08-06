@@ -7,7 +7,7 @@ import { decrypt, encrypt } from "@/lib/crypto";
 import { ArrowsClockwiseIcon, BackspaceIcon, LockIcon, TrashIcon } from "@phosphor-icons/react";
 import { deleteDocument, findDocument, saveDocument } from "@/actions/document";
 import { Document } from "@/generated/prisma/client";
-import { toast } from "sonner";
+import { toast } from "./ui/toast";
 import CreateDocumentDialog from "./dialogs/create-document-dialog";
 import UnlockDocumentDialog from "./dialogs/unlock-document-dialog";
 import CreatePasswordDialog from "./dialogs/create-password-dialog";
@@ -161,9 +161,15 @@ export default function EditorPage({ slug }: EditorPageProps) {
       setConfirmPassword("");
       setNewPasswordError("");
 
-      toast.success("Document saved successfully.");
+      toast.add({
+        type: "success",
+        description: "Document saved successfully.",
+      });
     } catch {
-      toast.error("Failed to save document.");
+      toast.add({
+        type: "error",
+        description: "Failed to save document.",
+      });
     } finally {
       setIsSaving(false);
     }
@@ -180,92 +186,93 @@ export default function EditorPage({ slug }: EditorPageProps) {
 
   // Update site / Save new data
   const handleUpdate = async () => {
-    toast.promise(
-      async () => {
-        try {
-          setIsSaving(true);
+    setIsSaving(true);
 
-          await delay(1000);
+    const savePromise = (async () => {
+      await delay(1000);
 
-          const encryped = await encrypt(text, documentPassword);
+      const encrypted = await encrypt(text, documentPassword);
 
-          const updated = await saveDocument(slug, encryped);
+      const updated = await saveDocument(slug, encrypted);
 
-          setDocument(updated);
+      setDocument(updated);
+      setSavedText(text);
 
-          setSavedText(text);
-        } catch (error) {
-          console.error(error);
-        } finally {
-          setIsSaving(false);
-        }
-      },
-      {
-        loading: "Saving...",
-        success: "Saved.",
-        error: "Failed to save.",
-        closeButton: true,
-      },
-    );
+      return updated;
+    })();
+
+    toast.promise(savePromise, {
+      loading: "Saving...",
+      success: "Saved.",
+      error: "Failed to save.",
+    });
+
+    try {
+      await savePromise;
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsSaving(false);
+    };
   };
 
   // Delete site
   const handleDelete = async () => {
-    toast.promise(
-      async () => {
-        try {
-          setIsDeleting(true);
+    setIsDeleting(true);
 
-          // Network delay
-          await delay(1000);
+    const deletePromise = (async () => {
+      // Network delay
+      await delay(1000);
 
-          await deleteDocument(slug);
+      await deleteDocument(slug);
 
-          router.replace("/");
-        } catch (error) {
-          console.error(error);
-        } finally {
-          setIsDeleting(false);
-        };
-      },
-      {
-        loading: "Deleting site...",
-        success: "This site has been deleted permanently.",
-        error: "Failed to delete site.",
-        closeButton: true,
-      },
-    );
+      router.replace("/");
+    })();
+
+    toast.promise(deletePromise, {
+      loading: "Deleting site...",
+      success: "This site has been deleted permanently.",
+      error: "Failed to delete site.",
+    });
+
+    try {
+      await deletePromise;
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsDeleting(false);
+    }
   };
 
   // Reload site data
   const handleReload = async () => {
-    toast.promise(
-      async () => {
-        try {
-          setIsReloading(true);
+    setIsReloading(true);
 
-          // Keep this network delay
-          await delay(1000);
+    const reloadPromise = (async () => {
+      // Keep this network delay
+      await delay(1000);
 
-          const decrypted = await decrypt(document!.content, password);
+      const decrypted = await decrypt(document!.content, password);
 
-          setDocumentPassword(password);
+      setDocumentPassword(password);
 
-          setText(decrypted);
-          setSavedText(decrypted);
-        } catch (error) {
-          console.error(error);
-        } finally {
-          setIsReloading(false);
-        };
-      },
-      {
-        loading: "Reloading...",
-        success: "Site updated.",
-        error: "Error updating site.",
-        closeButton: true,
-      }
-    );
+      setText(decrypted);
+      setSavedText(decrypted);
+    })();
+
+    toast.promise(reloadPromise, {
+      loading: "Reloading...",
+      success: "Site updated.",
+      error: "Error updating site.",
+    });
+
+    try {
+      await reloadPromise;
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsReloading(false);
+    }
   };
 
   // Cancel changing password
@@ -309,9 +316,15 @@ export default function EditorPage({ slug }: EditorPageProps) {
       setConfirmChangedPassword("");
       setChangedPasswordError("");
 
-      toast.success("Password changed successfully.");
+      toast.add({
+        type: "success",
+        description: "Password changed successfully.",
+      });
     } catch {
-      toast.error("Failed to change password.");
+      toast.add({
+        type: "error",
+        description: "Failed to change password.",
+      });
     } finally {
       setChangePasswordDialogOpen(false);
     };
@@ -547,39 +560,46 @@ export default function EditorPage({ slug }: EditorPageProps) {
             <div className="flex gap-2 justify-end">
               {/* Reload */}
               {documentPassword && (
-                <Tooltip delayDuration={250}>
-                  <TooltipTrigger asChild>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      disabled={isReloading}
-                      onClick={handleReload}
-                      className="rounded-lg"
-                    >
-                      {isReloading ? (
-                        <Spinner className="size-5" />
-                      ) : (
-                        <ArrowsClockwiseIcon className="size-5" />
-                      )}
-                    </Button>
+                <Tooltip>
+                  <TooltipTrigger
+                    render={
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        disabled={isReloading}
+                        onClick={handleReload}
+                        className="rounded-lg"
+                      />
+                    }
+                  >
+                    {isReloading ? (
+                      <Spinner className="size-5" />
+                    ) : (
+                      <ArrowsClockwiseIcon className="size-5" />
+                    )}
                   </TooltipTrigger>
 
-                  <TooltipContent side="bottom">Reload</TooltipContent>
+                  <TooltipContent side="bottom">
+                    Reload
+                  </TooltipContent>
                 </Tooltip>
               )}
 
               {/* Lock */}
               {documentPassword && (
-                <Tooltip delayDuration={250}>
-                  <TooltipTrigger asChild>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      onClick={handleLock}
-                      className="rounded-lg"
-                    >
-                      <LockIcon className="size-5" />
-                    </Button>
+                <Tooltip>
+                  <TooltipTrigger
+                    render={
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={handleLock}
+                        className="rounded-lg"
+                      >
+                        <LockIcon className="size-5" />
+                      </Button>
+                    }
+                  >
                   </TooltipTrigger>
 
                   <TooltipContent side="bottom">Lock</TooltipContent>
@@ -588,10 +608,13 @@ export default function EditorPage({ slug }: EditorPageProps) {
 
               {/* Reset */}
               <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button variant="ghost" size="icon" onClick={() => setText("")}>
-                    <BackspaceIcon className="size-5" />
-                  </Button>
+                <TooltipTrigger
+                  render={
+                    <Button variant="ghost" size="icon" onClick={() => setText("")}>
+                      <BackspaceIcon className="size-5" />
+                    </Button>
+                  }
+                >
                 </TooltipTrigger>
 
                 <TooltipContent side="bottom">Reset</TooltipContent>
