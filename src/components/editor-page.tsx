@@ -12,7 +12,7 @@ import CreateDocumentDialog from "./dialogs/create-document-dialog";
 import UnlockDocumentDialog from "./dialogs/unlock-document-dialog";
 import CreatePasswordDialog from "./dialogs/create-password-dialog";
 import { Spinner } from "./ui/spinner";
-import { delay } from "@/lib/utils";
+import { delay, MAX_DOCUMENT_LENGTH } from "@/lib/utils";
 import DeleteDocumentDialog from "./dialogs/delete-document-dialog";
 import { useRouter } from "next/navigation";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
@@ -66,6 +66,7 @@ export default function EditorPage({ slug }: EditorPageProps) {
 
   const hasUnsavedChanges = text !== savedText;
 
+  // check if entered slug is new or already existing
   useEffect(() => {
     async function checkDocument() {
       const doc = await findDocument(slug);
@@ -103,6 +104,20 @@ export default function EditorPage({ slug }: EditorPageProps) {
     };
   }, [hasUnsavedChanges]);
 
+  // document cannot exceed toast 
+  const isDocumentTooLong = () => {
+    if (text.length > MAX_DOCUMENT_LENGTH) {
+      toast.add({
+        type: "error",
+        description: `Document cannot exceed ${MAX_DOCUMENT_LENGTH.toLocaleString()} characters.`,
+      });
+
+      return true;
+    }
+
+    return false;
+  };
+
   // Unlock existing site
   const handleUnlock = async () => {
     try {
@@ -129,6 +144,8 @@ export default function EditorPage({ slug }: EditorPageProps) {
 
   // Save site for the first time
   const handleSave = async () => {
+    if (isDocumentTooLong()) return;
+
     if (!newPassword) {
       setNewPasswordError("Password is required.");
       return;
@@ -186,6 +203,8 @@ export default function EditorPage({ slug }: EditorPageProps) {
 
   // Update site / Save new data
   const handleUpdate = async () => {
+    if (isDocumentTooLong()) return;
+
     setIsSaving(true);
 
     const savePromise = (async () => {
@@ -286,6 +305,8 @@ export default function EditorPage({ slug }: EditorPageProps) {
 
   // Change password
   const handleChangePassword = async () => {
+    if (isDocumentTooLong()) return;
+
     if (!changedPassword) {
       setChangedPasswordError("Password is required.");
       return;
@@ -458,6 +479,7 @@ export default function EditorPage({ slug }: EditorPageProps) {
     ]
   );
 
+  // site loading
   if (isCheckingDocument) {
     return (
       <main className="flex min-h-screen items-center justify-center">
@@ -667,6 +689,10 @@ export default function EditorPage({ slug }: EditorPageProps) {
         </div>
 
         <TextEditor value={text} onChange={setText} isEditable={!locked} />
+
+        <div className="mt-1 mx-2 text-right text-sm text-muted-foreground tracking-wide">
+          {text.length.toLocaleString()} / {MAX_DOCUMENT_LENGTH.toLocaleString()}
+        </div>
       </main>
     </>
   );

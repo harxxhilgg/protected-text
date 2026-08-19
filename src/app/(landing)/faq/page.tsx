@@ -24,7 +24,7 @@ export default function FAQPage() {
 
               <p className="mt-1 flex text-muted-foreground text-sm sm:text-[16px]">
                 <span className="font-medium text-primary shrink-0">A:</span>
-                <span className="ml-1">{faq.answer}</span>
+                <span className="ml-1 whitespace-pre-line">{faq.answer}</span>
               </p>
             </motion.li>
           ))}
@@ -51,7 +51,7 @@ export default function FAQPage() {
 
                 <p className="mt-1 flex text-muted-foreground text-sm sm:text-[16px]">
                   <span className="font-medium text-primary shrink-0">A:</span>
-                  <span className="ml-1">{faq.answer}</span>
+                  <span className="ml-1 whitespace-pre-line">{faq.answer}</span>
                 </p>
               </motion.li>
             ))}

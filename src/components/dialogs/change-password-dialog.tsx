@@ -64,7 +64,7 @@ export default function ChangePasswordDialog({
 
         <div className="space-y-3 mt-2">
           <Field>
-            <FieldLabel htmlFor="password">Password</FieldLabel>
+            <FieldLabel htmlFor="password">New Password</FieldLabel>
 
             <Input
               id="password"
@@ -82,7 +82,7 @@ export default function ChangePasswordDialog({
           </Field>
 
           <Field>
-            <FieldLabel htmlFor="confirm-password">Confirm Password</FieldLabel>
+            <FieldLabel htmlFor="confirm-password">Confirm New Password</FieldLabel>
 
             <Input
               id="confirm-password"

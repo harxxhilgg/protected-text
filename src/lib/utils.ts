@@ -9,3 +9,5 @@ export function cn(...inputs: ClassValue[]) {
 export function delay(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
+
+export const MAX_DOCUMENT_LENGTH = 25_000;

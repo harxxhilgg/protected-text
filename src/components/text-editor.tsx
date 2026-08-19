@@ -40,7 +40,7 @@ export default function TextEditor({
       onChange={onChange}
       editable={isEditable}
       theme={oneDark}
-      height={isDesktop ? "90vh" : "80vh"}
+      height={isDesktop ? "85vh" : "80vh"}
       className="w-90 sm:w-full mx-auto"
       placeholder="Your text goes here..."
       aria-placeholder="Your text goes here..."
