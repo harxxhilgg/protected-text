@@ -291,9 +291,9 @@ export const markdownLinkTheme = EditorView.baseTheme({
     color: "#feb6b9",
     // textDecoration: "underline",
   },
-  ".cm-markdown-link:visited": {
-    color: "#a855f7",
-  },
+  // ".cm-markdown-link:visited": {
+  //   color: "#a855f7",
+  // },
   ".cm-markdown-link:active": {
     color: "#3b82f6",
   },
