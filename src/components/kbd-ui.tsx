@@ -88,6 +88,18 @@ export default function KbdUi() {
           </KbdGroup>
         </div>
       </div>
+
+      <div className="flex justify-end mb-7 mt-10">
+        <Label about="shortcut-heading" className="text-muted-foreground/80">Markdown Links</Label>
+      </div>
+
+      <div className="flex items-center text-sm text-muted-foreground gap-1">
+        <KbdGroup>
+          <kbd>[text](URL)</kbd>
+        </KbdGroup>
+
+        <p>creates a clickable links</p>
+      </div>
     </div>
   );
 };

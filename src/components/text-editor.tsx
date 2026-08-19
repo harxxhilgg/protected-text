@@ -3,6 +3,7 @@ import { oneDark } from "@codemirror/theme-one-dark";
 import { markdown } from "@codemirror/lang-markdown";
 import { EditorView } from "@codemirror/view";
 import { useMediaQuery } from "usehooks-ts";
+import { markdownLinks, markdownLinkTheme } from "@/lib/markdownLinks";
 
 interface TextEditorProps {
   value: string;
@@ -48,6 +49,9 @@ export default function TextEditor({
         markdown(),
         EditorView.lineWrapping, // Removes horizontal scrolling
         editorTheme,
+        // new
+        markdownLinks,
+        markdownLinkTheme,
       ]}
       basicSetup={{
         lineNumbers: false, // Toggle line numbers

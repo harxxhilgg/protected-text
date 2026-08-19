@@ -10,4 +10,5 @@ export function delay(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
+// Document length limit
 export const MAX_DOCUMENT_LENGTH = 25_000;
