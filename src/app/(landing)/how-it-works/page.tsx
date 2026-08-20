@@ -104,6 +104,13 @@ export default function HowItWorksPage() {
           </ul>
 
           <p className="text-sm sm:text-[16px] text-primary/90">Without the correct password, the encrypted data cannot be turned back into readable text.</p>
+
+          <p className="text-sm sm:text-[16px] text-primary/90 mt-2">
+            You can also use a password URL to unlock your note directly. For example:
+            <span className={`${geistMono.className} block w-fit mt-1 text-[14px] text-primary tracking-wide bg-accent px-2 py-0.5 rounded-lg`}>
+              baseURL/your-slug?p=your-password
+            </span>
+          </p>
         </div>
       </div>
 

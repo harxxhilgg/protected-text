@@ -20,7 +20,7 @@ export default function LandingPage() {
       setIsLoading(true);
 
       // Network delay
-      await delay(1000);
+      await delay(500);
 
       if (!slug) {
         setError("Please enter site/slug name.");

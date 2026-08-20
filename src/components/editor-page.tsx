@@ -14,7 +14,7 @@ import CreatePasswordDialog from "./dialogs/create-password-dialog";
 import { Spinner } from "./ui/spinner";
 import { delay, MAX_DOCUMENT_LENGTH } from "@/lib/utils";
 import DeleteDocumentDialog from "./dialogs/delete-document-dialog";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 import ChangePasswordDialog from "./dialogs/change-password-dialog";
 import { useHotkeys } from "react-hotkeys-hook";
@@ -26,6 +26,10 @@ interface EditorPageProps {
 
 export default function EditorPage({ slug }: EditorPageProps) {
   const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
+  const passwordFromUrl = searchParams.get("p");
 
   const [text, setText] = useState<string>("");
   const [savedText, setSavedText] = useState<string>("");
@@ -74,18 +78,42 @@ export default function EditorPage({ slug }: EditorPageProps) {
       setDocument(doc);
 
       if (doc) {
-        // Existing document
+        // existing document
         setLocked(true);
-        setUnlockDialogOpen(true);
+
+        // try password from URL if it exists
+        if (passwordFromUrl) {
+          try {
+            const decrypted = await decrypt(doc.content, passwordFromUrl);
+
+            setDocumentPassword(passwordFromUrl);
+
+            setText(decrypted);
+            setSavedText(decrypted);
+
+            setLocked(false);
+
+            // remove ?p= from the URL after successful unlock
+            router.replace(pathname);
+          } catch {
+            router.replace(pathname);
+            // invalid password in URL
+            setUnlockDialogOpen(true);
+          };
+        } else {
+          // no password in URL
+          setUnlockDialogOpen(true);
+        };
       } else {
-        // New document
+        // new document
         setCreateDialogOpen(true);
-      }
+      };
 
       setIsCheckingDocument(false);
     }
 
     checkDocument();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [slug]);
 
   // handleBefore ~ check for unsaved changes
@@ -124,7 +152,7 @@ export default function EditorPage({ slug }: EditorPageProps) {
       setIsUnlocking(true);
 
       // Network delay
-      await delay(1000);
+      await delay(500);
 
       const decrypted = await decrypt(document!.content, password);
 
@@ -160,7 +188,7 @@ export default function EditorPage({ slug }: EditorPageProps) {
       setIsSaving(true);
 
       // Network delay
-      await delay(1000);
+      await delay(500);
 
       setDocumentPassword(newPassword);
 
@@ -241,7 +269,7 @@ export default function EditorPage({ slug }: EditorPageProps) {
 
     const deletePromise = (async () => {
       // Network delay
-      await delay(1000);
+      await delay(500);
 
       await deleteDocument(slug);
 
@@ -269,7 +297,7 @@ export default function EditorPage({ slug }: EditorPageProps) {
 
     const reloadPromise = (async () => {
       // Keep this network delay
-      await delay(1000);
+      await delay(500);
 
       const decrypted = await decrypt(document!.content, password);
 
@@ -321,7 +349,7 @@ export default function EditorPage({ slug }: EditorPageProps) {
       setIsPasswordChanging(true);
 
       // Network delay
-      await delay(1000);
+      await delay(500);
 
       setDocumentPassword(changedPassword);
 
